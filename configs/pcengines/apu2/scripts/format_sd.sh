@@ -26,12 +26,6 @@ if [ ! -b "$PCDUINO_SD" ]; then
   exit 1
 fi
 
-ubootimg=$BUILDROOT_DIR/output/images/u-boot-sunxi-with-spl.bin
-if [ ! -f "$ubootimg" ]; then
-  echo "can't find u-boot image at $ubootimg"
-  exit 1
-fi
-
 if [ -z "$SKIFF_NO_INTERACTIVE" ]; then
   read -p "Verify that '$PCDUINO_SD' is the correct device. Be sure. [y/N] " -n 1 -r
   echo
@@ -70,8 +64,5 @@ $MKEXT4 -L rootfs "${PCDUINO_SD_SFX}2"
 
 echo "Building ext4 filesystem for persist..."
 $MKEXT4 -L persist "${PCDUINO_SD_SFX}3"
-
-echo "Flashing u-boot..."
-dd if="$ubootimg" of="$PCDUINO_SD" conv=fsync bs=1024 seek=8
 
 echo Done!
